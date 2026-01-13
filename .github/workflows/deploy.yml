@@ -3,7 +3,7 @@ name: Deploy todo-test
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
