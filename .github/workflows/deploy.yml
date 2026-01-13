@@ -1,16 +1,24 @@
 name: Deploy todo-test
+
 on:
   push:
-    branches: 
+    branches:
       - main
+
 jobs:
-  deploy: 
-      runs-on: [self-hosted,todo-test]
-      steps:
-        - name: Checkout fork repository
-          uses: actions/checkout@v4
-        - name: Deploy website
-          run: |
-            rsync -av --delete ./ /var/www/website \
-            --exclude .github \
-            --exclude .git
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy website to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "."
+          target: "/var/www/website"
+          rm: true
