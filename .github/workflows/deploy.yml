@@ -1,0 +1,16 @@
+name: Deploy todo-test
+on:
+  push:
+    branches: 
+      - main
+jobs:
+  deploy: 
+      runs-on: [self-hosted,todo-test]
+      steps:
+        - name: Checkout fork repository
+          uses: actions/checkout@v4
+        - name: Deploy website
+          run: |
+            rsync -av --delete ./ /var/www/website \
+            --exclude .github \
+            --exclude .git
